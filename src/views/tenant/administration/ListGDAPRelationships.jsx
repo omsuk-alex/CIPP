@@ -88,11 +88,36 @@ const Actions = (row, rowIndex, formatExtraData) => {
         extendedInfo={extendedInfo}
         actions={[
           {
+            label: 'Start Onboarding',
+            color: 'primary',
+            link:
+              '/tenant/administration/tenant-onboarding-wizard?tableFilter=Complex: id eq ' +
+              row.id,
+          },
+          {
+            label: 'Open Relationship in Partner Center',
+            color: 'info',
+            link:
+              'https://partner.microsoft.com/en-us/dashboard/commerce2/customers/' +
+              row?.customer?.tenantId +
+              '/adminrelationships/' +
+              row.id,
+            external: true,
+          },
+          {
             label: 'Enable automatic extension',
             color: 'info',
             modal: true,
             modalUrl: `/api/ExecAutoExtendGDAP?ID=${row.id}`,
             modalMessage: 'Are you sure you want to enable auto-extend for this relationship',
+          },
+          {
+            label: 'Remove Global Administrator from Relationship',
+            color: 'danger',
+            modal: true,
+            modalUrl: `/api/ExecGDAPRemoveGArole?&GDAPID=${row.id}`,
+            modalMessage:
+              'Are you sure you want to remove Global Administrator from this relationship?',
           },
           {
             label: 'Terminate Relationship',
@@ -111,7 +136,6 @@ const Actions = (row, rowIndex, formatExtraData) => {
     </>
   )
 }
-
 const GDAPRelationships = () => {
   const columns = [
     {
@@ -202,6 +226,13 @@ const GDAPRelationships = () => {
           tableProps: {
             selectableRows: true,
             actionsList: [
+              {
+                label: 'Remove Global Administrator from Relationship',
+                modal: true,
+                modalUrl: `/api/ExecGDAPRemoveGArole?&GDAPID=!id`,
+                modalMessage:
+                  'Are you sure you want to remove Global Administrator from these relationship(s)?',
+              },
               {
                 label: 'Terminate Relationship',
                 modal: true,
